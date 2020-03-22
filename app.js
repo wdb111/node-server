@@ -41,119 +41,53 @@ app.get("/authCode", function (req, res) {
     }
     let captcha = svgCaptcha.create(codeConfig);
     //存session用于验证接口获取文字码
+    let setTime=new Date()
     req.session.captcha = captcha.text.toLowerCase(); 
+    req.session.saptchaTime=setTime.getTime();
     let codeData = {
-        img: captcha.data,
-        isCode: true
+        data:{
+            img: captcha.data
+        },
+        message:"操作成功",
+        status:200
     }
-    res.status(200).send(codeData);
+    res.send(codeData);
 });
 
+const userLogin = require("./controller/user");
 //注册
 app.post("/reg", function (req, res) {
     setHeaders(res);
-    let regData = JSON.parse(req.query.params)
-    adminService.addValue("T_USER", regData, function (result) {
-        res.send(result)
-    })
+    userLogin.Reg(req, res);
 });
-
 //登录
-const Login = require("./controller/user");
 app.post("/login", function (req, res) {
     setHeaders(res);
-    Login.Login(req, res);
+    userLogin.Login(req, res);
 });
 
 //其他请求数据的接口
-app.get("/selectData", function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*")
-    res.setHeader("Access-Control-Allow-Credentials", "true")
-    // let tableName = req.query.tableName
-    // let myarr = JSON.parse(req.query.params)
-    // let myobj = {}
-    // for (i of myarr) {
-    //     myobj[i.column] = i.value
-    // }
-    // adminService.selectValue(tableName, myobj, function (result) {
-    //     res.send(result)
-    // })
-    if (req.url != '/user/login' && req.url != '/user/register') {
-        let token = req.headers.token;
-        let jwt = new JwtUtil(token);
-        let result = jwt.verifyToken();
-        // 如果考验通过就next，否则就返回登陆信息不正确
-        if (result == 'err') {
-            console.log(result);
-            res.send({
-                status: 403,
-                msg: '登录已过期,请重新登录'
-            });
-        } else {
-            //返回数据
-        }
-    } else {
-        //返回数据
-    }
-
-});
-
-
+const businessService=require("./controller/business")
 //添加数据
 app.post("/addValue", function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*")
-    res.setHeader("Access-Control-Allow-Credentials", "true")
-    let tableName = req.query.tableName
-    let myobj = JSON.parse(req.query.params)
-    adminService.addValue(tableName, myobj, function (result) {
-        res.send(result)
-    })
+    setHeaders(res);
+    businessService.ctAddValue(req,res)
 });
 //查询数据
-app.get("/selectValue", function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*")
-    res.setHeader("Access-Control-Allow-Credentials", "true")
-    let tableName = req.query.tableName
-    let myarr = JSON.parse(req.query.params)
-    let myobj = {}
-    for (i of myarr) {
-        myobj[i.column] = i.value
-    }
-    adminService.selectValue(tableName, myobj, function (result) {
-        res.send(result)
-    })
+app.post("/selectValue", function (req, res) {
+    setHeaders(res);
+    businessService.ctSelectValue(req,res)
 
 });
 //删除数据
 app.post("/deleteValue", function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*")
-    res.setHeader("Access-Control-Allow-Credentials", "true")
-    let tableName = req.query.tableName
-    let myarr = JSON.parse(req.query.params)
-    let myobj = {}
-
-    for (i of myarr) {
-        myobj[i.column] = i.value
-    }
-    adminService.deleteValue(tableName, myobj, function (result) {
-        res.send(result)
-    })
+    setHeaders(res);
+    businessService.ctDeleteValue(req,res)
 });
 //更新数据
 app.post("/updateValue", function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*")
-    res.setHeader("Access-Control-Allow-Credentials", "true")
-    let tableName = req.query.tableName
-    let myarr = JSON.parse(req.query.params)
-    let myobj = {}
-
-    for (i of myarr) {
-        myobj[i.column] = i.value
-    }
-    let newData = JSON.parse(req.query.newData)
-    adminService.updateValue(tableName, myobj, newData, function (result) {
-        res.send(result)
-    })
+    setHeaders(res);
+    businessService.ctUpdateValue(req,res)
 });
 
 app.listen(9999, function () {
