@@ -3,8 +3,16 @@ const app = express();
 const svgCaptcha = require('svg-captcha'); //npm install --save svg-captcha SVG二维码插件
 //设置处理post请求参数
 const bodyParser = require("body-parser");
+// 最多可以提供10,000个参数（根据需要增加）和10 MB数据（也可以调整）
 app.use(bodyParser.urlencoded({
-    extended: false
+    extended: false,
+    parameterLimit: 10000,
+     limit: 1024 * 1024 * 10
+}));
+app.use(bodyParser.json({
+        extended: false,
+     parameterLimit: 10000,
+     limit: 1024 * 1024 * 10
 }));
 
 //导入cookie模块

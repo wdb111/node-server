@@ -11,8 +11,15 @@ function judgeToken(req) {
 
 function ctAddValue(req, res) {
     let result = judgeToken(req)
-    let tableName = req.query.tableName
-    let myArr = JSON.parse(req.query.params);
+    // let tableName = req.query.tableName
+    // let myArr = JSON.parse(req.query.params);
+    let tableName = req.body.tableName
+    let myArr = JSON.parse(req.body.params);
+    //返回数据
+    businessService.addValue(tableName, myArr, function (result) {
+        res.send(result)
+    })
+    return;
     // 如果考验通过就next，否则就返回登陆信息不正确
     if (result == 'err') {
         res.send({
@@ -37,6 +44,11 @@ function ctSelectValue(req, res) {
     myarr.forEach(i => {
         myobj[i.column] = i.value
     })
+    //返回数据
+    businessService.selectValue(tableName, myobj, function (result) {
+        res.send(result)
+    })
+    return
     // 如果考验通过就next，否则就返回登陆信息不正确
     if (result == 'err') {
         res.send({
@@ -46,7 +58,6 @@ function ctSelectValue(req, res) {
     } else {
         //返回数据
         businessService.selectValue(tableName, myobj, function (result) {
-
             res.send(result)
         })
     }
