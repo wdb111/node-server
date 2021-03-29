@@ -82,7 +82,12 @@ app.post("/addValue", function (req, res) {
     businessService.ctAddValue(req,res)
 });
 //查询数据
-app.post("/selectValue", function (req, res) {
+// app.post("/selectValue", function (req, res) {
+//     setHeaders(res);
+//     businessService.ctSelectValue(req,res)
+
+// });
+app.get("/selectValue", function (req, res) {
     setHeaders(res);
     businessService.ctSelectValue(req,res)
 

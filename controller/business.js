@@ -13,10 +13,11 @@ function ctAddValue(req, res) {
     let result = judgeToken(req)
     // let tableName = req.query.tableName
     // let myArr = JSON.parse(req.query.params);
-    let tableName = req.body.tableName
-    let myArr = JSON.parse(req.body.params);
+    // let tableName = req.body.tableName
+    let tableName='t_station'
+    let myObj = JSON.parse(req.body.params);
     //返回数据
-    businessService.addValue(tableName, myArr, function (result) {
+    businessService.addOneValue(tableName, myObj, function (result) {
         res.send(result)
     })
     return;
@@ -38,12 +39,16 @@ function ctAddValue(req, res) {
 
 function ctSelectValue(req, res) {
     let result = judgeToken(req)
-    let tableName = req.query.tableName
-    let myarr = JSON.parse(req.query.params)
-    let myobj = {}
-    myarr.forEach(i => {
-        myobj[i.column] = i.value
-    })
+    // let tableName = req.query.tableName
+    let tableName = 't_station'
+    let myobj={
+        station:req.query.station
+    }
+    // let myarr = JSON.parse(req.query.params)
+    // let myobj = {}
+    // myarr.forEach(i => {
+    //     myobj[i.column] = i.value
+    // })
     //返回数据
     businessService.selectValue(tableName, myobj, function (result) {
         res.send(result)
