@@ -47,7 +47,7 @@ function addValue(tableName, myArr, cb) {
 function selectValue(tableName, myobj, cb) {
     businessDb.selectValues(tableName, myobj, function (res) {
         let obj = {
-            data: res,
+            data: [res[0].data],
             message: null,
             status: 200
         }

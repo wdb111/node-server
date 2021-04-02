@@ -42,7 +42,7 @@ function ctSelectValue(req, res) {
     // let tableName = req.query.tableName
     let tableName = 't_station'
     let myobj={
-        station:req.query.station
+        station:'沙湾'
     }
     // let myarr = JSON.parse(req.query.params)
     // let myobj = {}
